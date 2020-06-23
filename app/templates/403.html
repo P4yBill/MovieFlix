@@ -1,0 +1,9 @@
+{% extends "layout/base.html" %}
+{% block title %}Forbidden{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Forbidden</h1>
+        <p>You have not access to this page.
+        <p><a href="{{ url_for('main.index') }}">Head to home page.</a>
+    </div>
+{% endblock %}
