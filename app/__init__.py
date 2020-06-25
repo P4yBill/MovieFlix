@@ -14,10 +14,13 @@ from .login_manager import manage_login
 # auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
 
+
 def create_app(config_name):
     app = Flask(__name__)
     Bootstrap(app)
     app.secret_key = b'\xdf\xc0\xe8\xb0\x14\xb2\xad\x9f\x1c\xc19\x87/4\x19v\x11\xa8%I\xad=\x8f\x86'
+    # for testing
+    # app.config['WTF_CSRF_ENABLED'] = False
 
     csrf = CSRFProtect()
     csrf.init_app(app)
