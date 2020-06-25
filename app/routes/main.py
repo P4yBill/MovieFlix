@@ -1,4 +1,4 @@
-from flask import (render_template, request, redirect, url_for, Blueprint)
+from flask import (render_template, request, Blueprint)
 import json
 import flask_login
 from ..login_manager import restricted
@@ -19,7 +19,7 @@ def index():
 
 @main_bp.route('/<name>')
 def hello_name(name):
-    return f"Hello {name}!\n"
+    return f"Hello {request.endpoint}!\n"
 
 
 @main_bp.route("/getInfo", methods=['GET'])
