@@ -46,5 +46,4 @@ def register_error_pages(app):
 
     @app.errorhandler(403)
     def page_not_found(e):
-
         return render_template('403.html'), 403
