@@ -61,7 +61,7 @@ def register():
     # create new user with the form data. Hash the password so plaintext version isn't saved.
     hashed_pass = generate_password_hash(password, method='sha256')
 
-    users.insert_one({'email': email, 'name': name, 'password': hashed_pass, 'category': category})
+    users.insert_one({'email': email, 'name': name, 'password': hashed_pass, 'category': category, 'comments': []})
 
     user_to_login = {'email': email, 'name': name, 'category': category}
     login_retrieved_user(user_to_login)
