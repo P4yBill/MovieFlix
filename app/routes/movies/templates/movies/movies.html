@@ -12,7 +12,9 @@
 {% block content %}
     <div class="container col-md-9 mf-container pd-3">
         {{ flash_messages() }}
-        <a href="{{ url_for("movies_views.movie_create") }}" class="btn btn-primary mb-4" >Create Movie</a>
+        {% if current_user.is_authenticated and current_user.category == 'admin' %}
+            <a href="{{ url_for("movies_views.movie_create") }}" class="btn btn-primary mb-4">Create Movie</a>
+        {% endif %}
         {# include deletion form if user is admin #}
         {% include "movies/delete_movie_form.html" %}
         {% include "movies/search_movie_form.html" %}
