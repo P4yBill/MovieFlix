@@ -4,7 +4,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_bootstrap import Bootstrap
 from flask_assets import Environment
 from .assets import create_assets
-from .routes import auth_bp, api_bp, main_bp, auth_pages
+from .routes import auth_bp, api_bp, main_bp, auth_pages, movies_bp
 from flask_login import LoginManager
 from .models import User
 from .models.user import users
@@ -12,7 +12,8 @@ from .login_manager import manage_login
 
 
 # auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
-
+from .routes.admin_panel import admin_panel_pb
+from .routes.user_profile import user_profile_pb
 
 
 def create_app(config_name):
@@ -20,7 +21,7 @@ def create_app(config_name):
     Bootstrap(app)
     app.secret_key = b'\xdf\xc0\xe8\xb0\x14\xb2\xad\x9f\x1c\xc19\x87/4\x19v\x11\xa8%I\xad=\x8f\x86'
     # for testing
-    # app.config['WTF_CSRF_ENABLED'] = False
+    app.config['WTF_CSRF_ENABLED'] = False
 
     csrf = CSRFProtect()
     csrf.init_app(app)
@@ -37,6 +38,10 @@ def create_app(config_name):
     app.register_blueprint(api_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_pages)
+    app.register_blueprint(movies_bp)
+    app.register_blueprint(admin_panel_pb)
+    app.register_blueprint(user_profile_pb)
+
     register_error_pages(app)
 
     return app

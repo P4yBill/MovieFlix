@@ -1,0 +1,16 @@
+{% if current_user.category == 'admin' %}
+    <div class="mb-5">
+        <div class="h5 mb-2">Delete a movie:</div>
+        <div id="delete-movie-form" class="form-inline">
+            <span class="form-group mx-sm-3 mb-2">
+{#                <label for="input-title-delete">Title</label>#}
+                <input type="text" class="form-control" id="input-title-delete" name="title"
+                       placeholder="Enter title of movie to delete">
+            </span>
+            <span>
+                <button id="delete-movie-button" class="btn btn-danger mb-2">Delete
+            </button>
+            </span>
+        </div>
+    </div>
+{% endif %}

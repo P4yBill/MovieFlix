@@ -1,0 +1,16 @@
+{% extends "layout/base.html" %}
+{% from "macros/alerts.html" import flash_messages with context %}
+
+{% block title %}Create Movie{% endblock %}
+{% block styles %}
+    {% assets "movies-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css"/>
+    {% endassets %}
+{% endblock %}
+{% block content %}
+    <div class="container col-md-9 mf-container pd-3">
+        {{ flash_messages() }}
+        {% include "movies/create_movie_form.html" %}
+
+    </div>
+{% endblock %}

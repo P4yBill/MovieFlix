@@ -1,0 +1,44 @@
+{% macro user_row(user, user_catergory) -%}
+    <tr>
+        <td>
+            <span class="user-cell">
+                {{ user.email }}
+            </span>
+        </td>
+        <td>
+            {{ user.name }}
+        </td>
+        <th>
+            {#            <a href="{{ url_for("user_view", user_id=user.) }}" class="btn btn-primary">#}
+            {#                Del#}
+            {#            </a>#}
+            <button type="button" class="update-user-btn btn btn-primary" data-id="{{ user.email }}"
+                    data-toggle="modal" data-target="#update-user-modal">
+                Make Admin
+            </button>
+            <button type="button" class="delete-user-btn btn btn-danger" data-id="{{ user.email }}"
+                    data-toggle="modal" data-target="#delete-user-modal">
+                Delete
+            </button>
+
+
+        </th>
+    </tr>
+{%- endmacro %}
+
+{% macro users_table(users) -%}
+    <table id="users-table" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {{ user_row(user) }}
+        {% endfor %}
+        </tfoot>
+    </table>
+{%- endmacro %}

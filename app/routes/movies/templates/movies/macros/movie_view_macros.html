@@ -1,0 +1,53 @@
+{% macro movie_view(movie, current_user) -%}
+    <div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">{{ movie.title }}</h5>
+            <p class="card-text">{{ movie.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h6>Year </h6> {{ movie.year }}</li>
+            <li class="list-group-item"><h6>Rating </h6> {{ movie.rating }}</li>
+            <li class="list-group-item">
+                <h6>Actors </h6>
+                {% for actor in movie.actors %}
+                    {{ actor }}{% if movie.actors|count != loop.index %},&nbsp;{% endif %}
+                {% endfor %}
+            </li>
+        </ul>
+        <div class="card-body">
+            <div class="movie-comments">
+                <div class="movie-comments-create">
+                    <form action="{{ url_for("api.create_comment", movie_id=movie._id) }}" method="post">
+                        <div class="form-group">
+                            <label for="comment" class="h6">Add Comment: </label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="movie-comments-content">
+                    {% for comment in movie.comments %}
+                        <div class="comment mt-5">
+                            <div class="comment-user">
+                                {{ comment.user_id }}
+                            </div>
+                            <div class="comment-wrapper">
+                                <div class="comment-content">
+                                    {{ comment.comment }}
+                                </div>
+                                {% if current_user.id == comment.user_id
+                                    or (current_user.category == "admin" and comment.user_category != "admin" ) %}
+                                    <div class="comment-delete">
+                                        <img class="comment-delete-img"
+                                             data-user="{{ comment.user_id }}"
+                                             src="{{ url_for('static', filename='imgs/delete-icon.png') }}"/>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endmacro %}

@@ -1,0 +1,28 @@
+{% extends "layout/base.html" %}
+{% import "macros/alerts.html" as alerts %}
+{% import "admin_panel/macros/users_table_macros.html" as user_macros %}
+
+{% block title %}Admin panel{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"/>
+
+{#    {% assets "movies-css" %}#}
+{#        <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css"/>#}
+{#    {% endassets %}#}
+{% endblock %}
+{% block content %}
+    <div class="container col-md-9 mf-container pd-3">
+
+        {% include "admin_panel/admin_modals.html" %}
+        {{ alerts.flash_messages() }}
+        {{ user_macros.users_table(users) }}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    {% assets "admin_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}

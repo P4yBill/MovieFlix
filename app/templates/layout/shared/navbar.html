@@ -7,15 +7,27 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-
-                <a class="nav-item nav-link" href="#">Features</a>
-                <a class="nav-item nav-link" href="#">Pricing</a>
-                {% if current_user.is_authenticated and current_user.category == 'admin' %}
-                    <a class="nav-item nav-link" href="#">Admin Panel</a>
-                {% endif %}
                 {% if current_user.is_authenticated %}
-                    <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                    <a class="nav-item nav-link" href="{{ url_for("movies_views.movies_page") }}">Movies</a>
                 {% endif %}
+                {% if current_user.is_authenticated and current_user.category == 'admin' %}
+                    <a class="nav-item nav-link" href="{{ url_for("admin_panel.index") }}">Admin Panel</a>
+                {% endif %}
+                {#                <ul class="nav navbar-nav navbar-right">#}
+                {#                    {% if not current_user.is_authenticated %}#}
+                {#                        <li class="nav-item">#}
+                {#                            <a class="nav-link" href="{{ url_for('auth_pages.login_page') }}">Login</a>#}
+                {#                        </li>#}
+                {#                        <li class="nav-item">#}
+                {#                            <a class="nav-link" href="{{ url_for('auth_pages.register_page') }}">Register</a>#}
+                {#                        </li>#}
+                {#                    {% endif %}#}
+                {#                    {% if current_user.is_authenticated %}#}
+                {#                        <li class="nav-item">#}
+                {#                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>#}
+                {#                        </li>#}
+                {#                    {% endif %}#}
+                {#                </ul>#}
             </div>
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
@@ -25,6 +37,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth_pages.register_page') }}">Register</a>
+                        </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user_profile.index') }}">Profile</a>
                         </li>
                     {% endif %}
                     {% if current_user.is_authenticated %}
