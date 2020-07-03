@@ -6,8 +6,6 @@ from flask_assets import Environment
 from .assets import create_assets
 from .routes import auth_bp, api_bp, main_bp, auth_pages, movies_bp
 from flask_login import LoginManager
-from .models import User
-from .models.user import users
 from .login_manager import manage_login
 
 
