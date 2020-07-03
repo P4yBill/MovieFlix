@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import current_app
+from flask import current_app, render_template
 from werkzeug.exceptions import abort
 from .models import User
 from .routes.db import db
@@ -26,6 +26,10 @@ def manage_login(login_manager):
 
         return user
 
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        # do stuff
+        return render_template("401.html")
 
 def restricted(access_level):
     def decorator(func):
