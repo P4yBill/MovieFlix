@@ -2,7 +2,7 @@ from json import dumps
 
 from bson import ObjectId, json_util
 from bson.errors import InvalidId
-from flask import request, Response
+from flask import request, Response, flash, url_for, redirect
 from ..utils import wrong_res
 from ...login_manager import restricted
 from flask_login import login_required, current_user
@@ -18,45 +18,47 @@ class Comments(object):
             self.register_comments_routes(blueprint)
 
     def register_comments_routes(self, bp):
-        @bp.route('/movies/<string:movie_id>/comments', methods=['POST'])
+        @bp.route('/movies/<string:movie_id>/comments', endpoint='create_comment', methods=['POST'])
         @login_required
         def create_comment(movie_id):
-            res_obj = {}
-            if request.is_json:
-                content = request.get_json()
-            else:
-                return wrong_res("Bad Request")
+            comment_content = request.form.get('comment')
 
-            if "comment" not in content:
-                return wrong_res("Wrong params")
+            if not comment_content:
+                flash("Wrong params.", "danger")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
-            if not str(content["comment"]):
-                return wrong_res("Wrong params")
+            if not str(comment_content):
+                flash("Wrong params.", "danger")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
-            if content["comment"] == "":
-                return wrong_res("Wrong params")
+            if comment_content == "":
+                flash("Wrong params.", "danger")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
-            movie = movies.find_one({"_id": ObjectId(movie_id)})
+            try:
+                movie = movies.find_one({"_id": ObjectId(movie_id)})
+            except InvalidId:
+                flash("Wrong params.", "danger")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
             if not movie:
-                res_obj = {"error": "Movie could not be found"}
-                return Response(dumps(res_obj), status=500, mimetype="application/json")
+                # This will eventually redirect to movies_page
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
             email = current_user.id
             has_comment = users.find_one({"email": email, "comments": {"$elemMatch": {"movie_id": ObjectId(movie_id)}}})
 
             if has_comment:
-                res_obj = {"error": "You have already commented on this movie"}
-                return Response(dumps(res_obj), status=500, mimetype="application/json")
-
-            comment = content["comment"]
+                flash("You have already commented on this movie", "danger")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
             try:
                 users.update(
                     {"email": email},
                     {"$push": {"comments": {
                         "movie_id": ObjectId(movie_id),
-                        "comment": comment
+                        "comment": comment_content,
+                        "user_category": current_user.category
                     }}}
                 )
 
@@ -64,17 +66,18 @@ class Comments(object):
                     {"_id": ObjectId(movie_id)},
                     {"$push": {"comments": {
                         "user_id": email,
-                        "comment": comment
+                        "comment": comment_content,
+                        "user_category": current_user.category
                     }}}
                 )
 
-                res_obj["error"] = "OK"
-                return Response(json_util.dumps(res_obj), status=200, mimetype="application/json")
+                flash("Commented sucessfully", "success")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
             except Exception as e:
-                res_obj["error"] = "Could not insert the comment."
-                return Response(dumps(res_obj), status=500, mimetype='application/json')
+                flash("Something went wrong with creating the comment. Please try again.", "error")
+                return redirect(url_for("movies_views.movie_view", movie_id=movie_id))
 
-        @bp.route('/movies/<string:movie_id>/comments', methods=['DELETE'])
+        @bp.route('/movies/<string:movie_id>/comments', endpoint='delete_comment', methods=['DELETE'])
         @login_required
         def delete_comment(movie_id):
             res_obj = {}
@@ -98,10 +101,10 @@ class Comments(object):
             user_id = content["user_id"]
 
             # email = current_user.id
-            current_user = {"category": "user", "id": "vvv@gmail.com"}
+            # current_user = {"category": "user", "id": "vvv@gmail.com"}
 
             if current_user.id != user_id:
-                user = users.find_one({"email" : user_id})
+                user = users.find_one({"email": user_id})
                 print(user)
                 if not user:
                     return wrong_res("User could not be found.")
@@ -110,7 +113,8 @@ class Comments(object):
                     res_obj = {"error": "You dont have the rights to do this action."}
                     return Response(dumps(res_obj), status=403, mimetype="application/json")
 
-            has_comment = users.find_one({"email": user_id, "comments": {"$elemMatch": {"movie_id": ObjectId(movie_id)}}})
+            has_comment = users.find_one(
+                {"email": user_id, "comments": {"$elemMatch": {"movie_id": ObjectId(movie_id)}}})
 
             if not has_comment:
                 res_obj = {"error": "Comment does not exist"}

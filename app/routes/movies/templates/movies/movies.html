@@ -1,0 +1,32 @@
+{% extends "layout/base.html" %}
+{% from "macros/alerts.html" import flash_messages with context %}
+{% import "movies/macros/table_macros.html" as table_macros %}
+{% block title %}Movies{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"/>
+
+    {% assets "movies-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css"/>
+    {% endassets %}
+{% endblock %}
+{% block content %}
+    <div class="container col-md-9 mf-container pd-3">
+        {{ flash_messages() }}
+        <a href="{{ url_for("movies_views.movie_create") }}" class="btn btn-primary mb-4" >Create Movie</a>
+        {# include deletion form if user is admin #}
+        {% include "movies/delete_movie_form.html" %}
+        {% include "movies/search_movie_form.html" %}
+
+        {{ table_macros.movies_table(movies, current_user) }}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+    {% assets "movies_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

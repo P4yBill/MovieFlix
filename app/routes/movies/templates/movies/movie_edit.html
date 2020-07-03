@@ -1,0 +1,26 @@
+{% extends "layout/base.html" %}
+{% from "macros/alerts.html" import flash_messages with context %}
+
+{% block title %}Edit Movie{% endblock %}
+{% block styles %}
+    {% assets "movies-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css"/>
+    {% endassets %}
+{% endblock %}
+{% block content %}
+    <div class="container col-md-9 mf-container pd-3">
+        {% include "movies/edit_movie_form.html" %}
+
+        {#        {% include "movies/create_movie_form.html" %}#}
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+    {% assets "movies_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}

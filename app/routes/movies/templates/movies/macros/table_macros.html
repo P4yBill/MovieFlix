@@ -1,0 +1,55 @@
+{% macro movie_row(movie, user_catergory) -%}
+    <tr>
+        <td>
+            <span class="movie-cell">
+                {{ movie.title }}
+            </span>
+        </td>
+        <td>
+            {{ movie.year }}
+        </td>
+        <td>
+            <span class="movie-cell">
+                {{ movie.description }}
+            </span>
+        </td>
+        <td>
+            <span class="movie-cell">
+                {% for actor in movie.actors %}
+                    {{ actor }}{% if movie.actors|count != loop.index %},&nbsp;{% endif %}
+                {% endfor %}
+            </span>
+
+        </td>
+        <th>
+            {#            <a href="{{ url_for("movie_view", movie_id=movie.) }}" class="btn btn-primary">#}
+            {#                Del#}
+            {#            </a>#}
+            <a href="{{ url_for("movies_views.movie_view", movie_id=movie._id) }}" class="btn btn-primary ma-1">View</a>
+            {% if user_catergory == 'admin' %}
+                <a href="{{ url_for("movies_views.movie_edit", movie_id=movie._id) }}" class="btn btn-primary ma-1">Edit</a>
+            {% endif %}
+
+
+        </th>
+    </tr>
+{%- endmacro %}
+
+{% macro movies_table(movies, current_user) -%}
+    <table id="movies-table" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Plot</th>
+            <th>Actors</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for movie in movies %}
+            {{ movie_row(movie, current_user.category) }}
+        {% endfor %}
+        </tfoot>
+    </table>
+{%- endmacro %}

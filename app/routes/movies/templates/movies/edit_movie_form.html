@@ -1,0 +1,30 @@
+{% from "movies/macros/shared_macros.html" import show_actors with context %}
+
+<div class="mb-5 mt-2">
+    <div class="h5 mb-1">Edit Movie</div>
+    <div class="font-italic mb-3">The title and at least one actor are mandatory.</div>
+    <div id="edit-movie-form">
+        <div class="form-group">
+            <label for="input-title">Title:</label>
+            <input type="text" class="form-control" id="input-title" name="title" placeholder="Enter title of movie"
+                   required value="{{ movie.title }}"/>
+        </div>
+        <div class="form-group">
+            <label for="input-description">Description:</label>
+            <input type="text" class="form-control" id="input-description" name="description"
+                   placeholder="Enter plot of movie" value="{{ movie.description }}"
+            />
+        </div>
+        <div class="form-group">
+            <label for="input-year">Year:</label>
+            <input type="number" class="form-control" id="input-year" name="year" placeholder="Enter year of movie"
+                   value="{{ movie.year }}"/>
+        </div>
+        <div class="form-group">
+            <label for="input-actors">Actors(type actors delimited with ","(comma):</label>
+            <textarea class="form-control" id="input-actors" name="actors" rows="3" placeholder="Actors"
+                      required>{{ show_actors(movie.actors) }}</textarea>
+        </div>
+        <button name="submit" id="edit-movie-button" class="btn btn-primary">Edit</button>
+    </div>
+</div>

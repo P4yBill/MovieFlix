@@ -1,0 +1,3 @@
+{% macro show_actors(actors) -%}
+    {% for actor in actors %}{{ actor }}{% if actors|count != loop.index %},&nbsp;{% endif %}{% endfor %}
+{%- endmacro %}
