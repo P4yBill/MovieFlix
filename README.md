@@ -1,4 +1,4 @@
-# A Flask based api with mongodb and docker
+# A Flask based app with mongodb and docker
 
 This is a project for the Information Systems Course. The app's name is MovieFlix and was built with Flask, Mongodb and Docker.
 In general, a user simple "user" has some functionalities that those functionalities are extend when a user is an "admin"(create a movie, edit movie etc. See below).
